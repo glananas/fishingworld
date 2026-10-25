@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FISHING WORLD</title>
+<style>
+:root{--f:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;--bg:#0a1519;--p:#12262c;--p2:#1c3a42;--tx:#eae6d8;--mu:#8fa9a4;--ac:#d9a441;--ok:#6fcf97;--bad:#e8704a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%}body{background:radial-gradient(120% 60% at 50% 0,#173842,var(--bg));color:var(--tx);font:15px/1.4 var(--f);overflow-x:hidden}
+h2,h3,.logo{font-family:var(--f);font-weight:600;letter-spacing:.2px}
+#app{height:100%;display:flex;flex-direction:column;max-width:560px;margin:auto}
+#top{padding:8px 12px;background:#0d1d22;border-bottom:1px solid #d9a44133}#top .row{margin-bottom:5px}.logo{color:var(--ac);font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+main{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 12px}
+nav{display:flex;background:#0d1d22;border-top:1px solid #d9a44133}
+nav button{flex:1;background:none;border:0;color:var(--mu);padding:6px 0;font-size:10px;min-width:0}nav svg{display:block;margin:0 auto 2px;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}nav .on{color:var(--ac)}
+.card{background:linear-gradient(160deg,var(--p),#0f2227);border:1px solid #ffffff10;border-radius:14px;padding:12px;margin-bottom:10px}.row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.btn{background:linear-gradient(#e6b650,#c58f2c);color:#201500;border:0;border-radius:12px;padding:10px 14px;font:600 15px/1.2 var(--f);min-height:44px;box-shadow:0 2px 0 #7a5614}.btn.s{background:var(--p2);color:var(--tx);box-shadow:none;border:1px solid #ffffff18}.btn:disabled{opacity:.4}.btn.w{width:100%}
+.bar{height:9px;border-radius:6px;background:#0008;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--ok)}
+.mu{color:var(--mu);font-size:13px;font-weight:400}button,select{font-family:var(--f)}.chip{display:inline-block;background:var(--p2);border-radius:20px;padding:3px 9px;margin:2px 3px 2px 0;font-size:12px}.chip.on{background:var(--ac);color:#201500}
+.up{color:var(--ok)}.dn{color:var(--bad)}h3{margin:6px 0 6px;font-size:14px;color:var(--ac);text-transform:uppercase;letter-spacing:.08em}select{width:100%;background:var(--p2);color:var(--tx);border:0;border-radius:10px;padding:10px;font-size:15px}
+.coin{display:inline-block;width:11px;height:11px;border-radius:50%;background:radial-gradient(#f5d77a,#b8801f);margin-left:3px;vertical-align:-1px}
+.ic{width:44px;height:44px;flex:none;background:#0b181c;border-radius:10px}.it{display:flex;gap:10px;align-items:center}
+.scene{height:120px;border-radius:16px;position:relative;overflow:hidden;margin-bottom:10px}.tr{position:absolute;left:0;right:0;top:30px;height:44px;clip-path:polygon(0 100%,0 40%,6% 10%,12% 45%,18% 5%,25% 40%,32% 0,40% 40%,48% 8%,56% 45%,64% 5%,72% 40%,80% 10%,88% 45%,94% 12%,100% 40%,100% 100%)}
+.wa{position:absolute;left:0;right:0;top:72px;bottom:0}.wa:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,#ffffff12 0 2px,transparent 2px 14px);animation:fl 6s linear infinite}@keyframes fl{to{background-position:0 28px}}
+.lab{position:absolute;left:10px;top:6px;font:700 14px var(--f);text-shadow:0 1px 4px #000a}
+.bob{position:absolute;left:50%;top:84px;width:12px;height:17px;margin-left:-6px;border-radius:50% 50% 40% 40%;background:linear-gradient(#e33 50%,#fff 50%);opacity:0}.bob.on{opacity:1;animation:bb 2s ease-in-out infinite}.bob.dip{opacity:1;animation:dip .3s infinite}
+@keyframes bb{50%{transform:translateY(3px)}}@keyframes dip{50%{transform:translateY(12px)}}
+.rain{position:absolute;inset:0;background:repeating-linear-gradient(100deg,#fff3 0 1px,transparent 1px 14px);animation:fl 1s linear infinite;opacity:.5}
+canvas{width:100%;display:block;border-radius:12px;touch-action:manipulation}
+.gz{position:relative;height:16px;background:#0008;border-radius:8px;margin:8px 0}.zn{position:absolute;top:0;bottom:0;background:#6fcf9788;border-radius:8px}.mk{position:absolute;top:-3px;width:4px;height:22px;background:#fff;border-radius:2px}
+#toast{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));background:#000d;border-radius:12px;padding:10px 12px;text-align:center;opacity:0;pointer-events:none;transition:.25s;z-index:20}#toast.on{opacity:1}
+#big{height:76px;font-size:19px;touch-action:none;position:sticky;bottom:4px}
+.mod{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}.mc{width:100%;max-width:400px;background:linear-gradient(160deg,#173842,#0d1d22);border:2px solid;border-radius:20px;padding:16px;text-align:center;animation:pop .3s}@keyframes pop{from{transform:scale(.9);opacity:0}}.mb{font:600 12px var(--f);text-transform:uppercase;letter-spacing:.12em}.big{font:600 22px var(--f);margin:2px 0}
+
+body{background-image:repeating-radial-gradient(circle at 15% 8%,#ffffff07 0 1px,transparent 1px 26px),radial-gradient(120% 60% at 50% 0,#173842,#0a1519)}
+.hud{display:flex;justify-content:space-between;align-items:flex-end;margin:2px 2px 10px}.hud h2{font-size:23px;font-style:italic;color:var(--tx);line-height:1.1}.ey{font:700 10px/1 var(--f);letter-spacing:2px;color:var(--ac);margin-bottom:4px}
+.brass{text-align:center;border:1px solid var(--ac);border-radius:10px;padding:4px 10px;font:700 17px var(--f);color:var(--ac);background:#d9a44112}.brass small{display:block;font:400 10px var(--f);letter-spacing:.1em;color:var(--mu)}
+.chart{position:relative;border:2px solid #b8801f;border-radius:16px;padding:6px;margin-bottom:10px;background:#0d1d22;box-shadow:inset 0 0 0 1px #00000088,0 4px 14px #0008}
+.chart canvas{border-radius:10px}.rose{position:absolute;right:12px;top:12px;width:38px;opacity:.85}
+.legend{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--mu);margin:6px 2px 2px}.legend i{flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,hsl(195,60%,66%),hsl(210,60%,40%),hsl(225,60%,16%))}
+#pinfo{padding:2px 4px 2px}
+.rig{display:flex;gap:6px;margin-bottom:10px}.slot{flex:1;min-width:0;background:linear-gradient(#173842,#102a31);border:1px solid #b8801f66;border-radius:12px;padding:4px 2px;text-align:center}.slot .ic{width:100%;height:38px;background:none}.slot span{display:block;font-size:9px;letter-spacing:1px;color:var(--mu);text-transform:uppercase}.slot b{display:block;font-size:11px;color:var(--ac);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dials{display:flex;gap:12px;align-items:center;margin-top:10px}.side{flex:1}
+.dial{position:relative;width:132px;height:72px;overflow:hidden;flex:none}.dial i{position:absolute;left:0;top:0;width:132px;height:132px;border-radius:50%;background:conic-gradient(from -90deg,var(--c,#6fcf97) calc(var(--v,0)*.5%),#08141a 0 50%,transparent 0);-webkit-mask:radial-gradient(circle,transparent 40px,#000 41px);mask:radial-gradient(circle,transparent 40px,#000 41px)}.dial b{position:absolute;left:0;right:0;bottom:2px;text-align:center;font:700 10px var(--f);letter-spacing:2px;color:var(--mu)}
+#big{border-radius:40px;font-family:var(--f);letter-spacing:.1em;text-transform:uppercase;font-weight:600;border:2px solid #fff3}
+.stage{position:relative;height:250px;border-radius:16px;overflow:hidden;margin-bottom:8px;border:2px solid #b8801f;box-shadow:0 4px 14px #0009}.stage svg{position:absolute;inset:0;width:100%;height:100%}.fb{transform-box:fill-box}.fb.on{animation:bb 2s ease-in-out infinite}.fb.dip{animation:dip .3s infinite}
+.tag{position:absolute;top:8px;font:600 14px var(--f);text-shadow:0 1px 4px #000;color:#fff;background:#0008;border-radius:10px;padding:4px 9px;border:0;text-align:left}.tag small{display:block;font:400 10px var(--f);letter-spacing:.1em;color:#d8e6e0}.tag.l{left:8px}.tag.r{right:8px;border:1px solid var(--ac);color:var(--ac);min-height:44px}
+.fg{background:linear-gradient(#10252b,#0c1b20);border:1px solid #b8801f66;border-radius:12px;padding:8px 10px;margin-bottom:8px}.fg.idl .bar{opacity:.4}.fr{display:flex;align-items:center;gap:8px;margin:4px 0}.fr span{width:88px;font:600 10px var(--f);letter-spacing:.1em;color:var(--mu)}.fr .bar{flex:1;height:12px}.fr em{width:38px;text-align:right;font-style:normal;font-size:12px}.zbar{background:linear-gradient(90deg,#0008 70%,#e8704a55 70%)}#st{margin-top:4px;font-weight:700;min-height:20px;color:var(--ac)}
+.sheet{position:fixed;inset:0;background:#000c;z-index:15;display:flex;align-items:center;padding:10px}.sheet .chart{width:100%;margin:0;max-width:540px;margin:auto}
+.ck{display:inline-block;width:14px;height:14px;border:1.5px solid var(--ac);border-radius:4px;vertical-align:-2px;margin-right:6px}.ck.on{background:var(--ac)}
+.note{position:absolute;left:8px;top:56px;max-width:58%;background:#0a1a1fe6;border:1px solid #6fcf97;color:#d9f5e3;border-radius:10px;padding:6px 10px;font-size:13px;font-weight:600;animation:pop .25s;z-index:2}.note.err{border-color:#e8704a;color:#ffd9cf}
+.lvn{font:600 52px/1 var(--f);color:var(--ac);margin:6px 0}.mc ul{list-style:none;text-align:left;margin:10px 0}.mc li{padding:5px 0;border-top:1px solid #ffffff14;font-size:14px}
+</style></head><body>
+<div id="app"><header id="top"></header><main id="main"></main><nav id="nav"></nav></div><div id="toast"></div><div id="modal"></div>
+<script>
+"use strict";
+const tg=window.Telegram&&window.Telegram.WebApp;if(tg){try{tg.ready();tg.expand()}catch(e){}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const NAME=esc((tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||"Рыбак");
+/* ===== CONFIG: весь баланс здесь ===== */
+const CFG={netCap:20,storeCap:30,start:{m:100,worm:15},xpNeed:l=>Math.round(40*l*l+100*l),lvRw:l=>l*30,newSp:15,visXp:40,repeatDecay:.7,repeatWin:6,grid:[48,34],gz:{w:.3}};
+const RAR={c:1,u:1.3,r:1.8,t:2.6},RL={c:"Обычная",u:"Необычная",r:"Редкая",t:"Трофейная"},CN=["Маленькая","Средняя","Большая"];
+const FISH={};[["karas","Карась","c",.2,1.2,14,2,.7,.9,0],["plotva","Плотва","c",.1,.8,12,2,.6,1,0],["okun","Окунь","c",.15,1.5,22,3,.8,1.2,1],["lesh","Лещ","u",.5,4,18,4,1.3,1,0],["lin","Линь","u",.4,3,28,4,1.3,.8,0],["karp","Карп","r",1,12,20,6,1.2,.9,0],["shchuka","Щука","r",1,10,30,6,.8,1.3,1],["sudak","Судак","r",1,8,38,6,1.5,1.1,1],["forel","Форель","r",.3,4,55,5,.7,1.3,1],["som","Сом","t",5,35,22,9,1.8,1.2,1]].forEach(a=>FISH[a[0]]={id:a[0],n:a[1],r:a[2],w:[a[3],a[4]],p:a[5],d:a[6],nt:a[7],rn:a[8],pr:a[9]});
+/* поведение: [глубина-предпочтение, разброс, сила, выносливость, частота рывков(меньше=чаще), длина см на ∛кг, признак поклёвки, цвет, описание] */
+const FX={karas:[1.5,1.5,.8,40,1.1,18,"плавный подъём поплавка","#c9a24a","Золотистый обитатель заросших мелководий."],plotva:[2,2,.7,35,.9,16,"частые мелкие тычки","#b8c4cc","Стайная серебристая рыбка с красными плавниками."],okun:[3,2.5,1,50,.8,20,"резкая поклёвка","#6f8f3a","Полосатый хищник, держится у кромки."],lesh:[4,2.5,.9,70,1.2,28,"плавный увод вбок","#a9a58f","Плоское тело — тянет тяжело и упрямо."],lin:[1.8,1.5,.9,60,1.3,24,"медленный подъём","#6a7a3e","Тёмный обитатель тихих заводей."],karp:[3,3,1.3,80,.9,40,"уверенный увод","#b98a3a","Мощный, быстро набирает ход."],shchuka:[2.5,2,1.3,55,.6,55,"резкий рывок","#5d7a3a","Засадный хищник с сильными бросками."],sudak:[6,3,1.1,60,.8,45,"короткие тычки у дна","#8fa0a8","Глубинный хищник, любит ямы."],forel:[4,3,1.2,50,.5,32,"быстрая поклёвка","#c4a07a","Юркая, часто рвётся из стороны в сторону."],som:[8,4,1.5,100,1.4,90,"тяжёлая потяжка","#4a4a3a","Гигант ям, долго не сдаётся."]};
+/* профили глубин: b=база, s=уклон от берега, p=[x,y,радиус,амплитуда] ямы, ch=русло [x,ширина,амп], e=овальный берег, lm=ориентиры */
+const LOC={
+lake:{n:"Берёзовое озеро",d:"Тихая вода, мелкая мирная рыба. Идеально для старта.",lv:1,cost:0,cur:0,pool:{karas:10,plotva:8,okun:6,lin:3,karp:1},sk:["#6fb3d9","#cfe6d8","#2f7d86","#143f4a","#1f4d33"],rec:"Червь, кукуруза",dm:{b:.6,s:1.6,e:1,p:[[.35,.4,.16,2.8],[.7,.3,.1,2],[.5,.72,.12,1]],lm:[[.2,.2,"Тростник"],[.78,.6,"Коряга"]]}},
+river:{n:"Река Тихая Сосна",d:"Течение добавляет 20% нагрузки при вываживании. Лещ, щука, форель.",lv:2,cost:150,cur:.5,pool:{plotva:8,okun:6,lesh:6,shchuka:3,forel:2},sk:["#e8a96b","#f3dcb8","#3d8a72","#1b4a45","#2c5a2a"],rec:"Опарыш, блесна",dm:{b:.8,s:.8,ch:[.55,.12,3],p:[[.25,.5,.1,2.2]],lm:[[.1,.3,"Перекат"],[.88,.55,"Мост"]]}},
+res:{n:"Водохранилище Серебряный Яр",d:"Простор и крупная рыба: карп, судак, редкий сом. Нужны прочные снасти.",lv:4,cost:600,cur:.2,pool:{lesh:8,plotva:5,karp:6,sudak:5,shchuka:4,som:1.5},sk:["#5d86b8","#b9cde6","#2c5c86","#102c4a","#3a5a4a"],rec:"Кукуруза, воблер, силикон",dm:{b:1,s:4.2,p:[[.3,.35,.15,5],[.75,.5,.12,4],[.55,.2,.1,3]],lm:[[.5,.5,"Бровка"],[.15,.8,"Дамба"]]}},
+north:{n:"Холодное Око",d:"Северное озеро: форель, щука, судак, сомы. Самое сложное место.",lv:7,cost:1800,cur:.3,pool:{forel:8,okun:6,shchuka:6,sudak:5,lesh:3,som:2},sk:["#2b3a5e","#8aa0c4","#1d4a60","#0a1e2e","#1a3a3a"],rec:"Блесна, силикон",dm:{b:1.5,s:5.5,e:1,p:[[.5,.4,.2,6],[.2,.2,.1,4]],lm:[[.5,.12,"Скала"],[.85,.65,"Валун"]]}}};
+const BT={worm:{n:"Червь",nat:1,p:20,pack:10,lv:1,a:{karas:2,plotva:1.2,okun:2,lesh:1.5,lin:2,karp:.8,forel:1,som:1}},maggot:{n:"Опарыш",nat:1,p:25,pack:10,lv:1,a:{plotva:2.5,karas:1.5,lesh:2,forel:1.5,okun:.6}},corn:{n:"Кукуруза",nat:1,p:30,pack:10,lv:2,a:{karp:3,karas:1.5,lin:1.5,lesh:1}},spinner:{n:"Блесна «Лист»",p:90,lv:2,a:{okun:2.5,shchuka:3,sudak:1.2,forel:2.5}},wobbler:{n:"Воблер «Угорь»",p:250,lv:3,a:{shchuka:3,sudak:2.5,som:1.2,okun:1.5,forel:2}},silicone:{n:"Силикон «Рипер»",p:180,lv:3,a:{sudak:3,shchuka:2,okun:2,som:1.5}}};
+const I={};[["r1","r","Бамбуковая удочка",0,1,{pow:3,sens:.2,rng:.5}],["r2","r","Телескоп «Берег»",250,2,{pow:6,sens:.4,rng:.65}],["r3","r","Спиннинг «Тайга»",900,4,{pow:12,sens:.6,rng:.85}],["r4","r","Карповое «Титан»",2800,7,{pow:25,sens:.8,rng:1.05}],
+["c1","c","Простая катушка",0,1,{speed:14,cap:3}],["c2","c","Инерционная 200",200,2,{speed:20,cap:8}],["c3","c","Безынерционная 3000",800,4,{speed:28,cap:16}],["c4","c","Мощная 6000",2500,7,{speed:36,cap:30}],
+["l1","l","Леска 0.25 мм",0,1,{str:2.5}],["l2","l","Леска 0.30 мм",120,2,{str:6}],["l3","l","Плетёнка 0.20",500,4,{str:12}],["l4","l","Плетёнка 0.35",1500,7,{str:22}],
+["h1","h","Крючок №8",0,1,{max:1.5}],["h2","h","Крючок №4",80,2,{max:5}],["h3","h","Крючок №1/0",400,4,{max:15}],["h4","h","Крючок №4/0",1200,7,{max:40}]].forEach(a=>I[a[0]]={id:a[0],t:a[1],n:a[2],p:a[3],lv:a[4],s:a[5]});
+const ST={pow:"Нагрузка, кг",sens:"Чуткость",rng:"Дальность",speed:"Скорость",cap:"Предел лески, кг",str:"Прочность, кг",max:"Макс. рыба, кг"},TN={r:"Удилища",c:"Катушки",l:"Лески",h:"Крючки"};
+const QS=[{id:"q1",n:"Первый улов",d:"Поймай 3 рыбы",need:3,g:s=>s.st.c,rw:50},{id:"q2",n:"Хищник",d:"Поймай 2 хищных рыбы",need:2,g:s=>s.st.pred,rw:120},{id:"q3",n:"Торговец",d:"Продай рыбы на 300",need:300,g:s=>s.st.sold,rw:100},{id:"q4",n:"Путешественник",d:"Побывай на 2 водоёмах",need:2,g:s=>Object.keys(s.st.vis).length,rw:150},{id:"q5",ul:4,n:"Опытный рыбак",d:"Достигни 4 уровня",need:4,g:s=>s.lv,rw:300}];
+const FJ={karas:[1.3,.8,2.6],plotva:[1.1,.6,2.8],okun:[1.8,.9,2],lesh:[1.4,1.4,3],lin:[1.3,1.2,3.2],karp:[1.9,1.3,2.5],shchuka:[2.6,.9,1.8],sudak:[1.9,1.1,2.2],forel:[2.4,.8,1.5],som:[3,2,3]};
+const PAY={enabled:false,orderStatuses:["created","pending","paid","granted","failed","refunded"],offers:[]};
+/* ===== Графика (SVG, создана в коде) ===== */
+const sh={lesh:[30,18],karas:[27,17],karp:[32,16],okun:[28,14],shchuka:[38,9],sudak:[34,10],som:[36,11],forel:[30,11],plotva:[28,12],lin:[28,14]};
+function fishSVG(f){const [rx,ry]=sh[f],c=FX[f][7],cx=64;let x="";
+ if(f==="okun")for(let i=0;i<5;i++)x+=`<path d="M${cx-14+i*8} ${30-ry+2}v${ry*2-4}" stroke="#2a3a14" stroke-width="3" opacity=".6"/>`;
+ if(f==="forel"||f==="karp")for(let i=0;i<6;i++)x+=`<circle cx="${cx-14+i*8}" cy="${28+(i%2)*6}" r="2" fill="${f==="forel"?"#a83232":"#7a5a1a"}"/>`;
+ if(f==="som")x+=`<path d="M${cx-rx+4} 30q-12 4-16 12M${cx-rx+4} 28q-12-2-16-10" stroke="${c}" stroke-width="2" fill="none"/>`;
+ return `<svg viewBox="0 0 130 60" width="170" role="img"><path d="M${cx+rx-4} 30l${22} -${ry+4}v${ry*2+8}z" fill="${c}"/><ellipse cx="${cx}" cy="30" rx="${rx}" ry="${ry}" fill="${c}"/><ellipse cx="${cx}" cy="${30+ry*.45}" rx="${rx-4}" ry="${ry*.5}" fill="#fff" opacity=".28"/><path d="M${cx-6} ${30-ry}q8-10 18 0z" fill="#0004"/><circle cx="${cx-rx+9}" cy="26" r="3" fill="#111"/>${x}</svg>`}
+function bico(id){const m={worm:'<path d="M8 30q6-12 12 0t12 0 12 0" stroke="#c46a6a" stroke-width="5" fill="none" stroke-linecap="round"/>',maggot:'<ellipse cx="14" cy="24" rx="6" ry="3" fill="#e8dfa0"/><ellipse cx="26" cy="30" rx="6" ry="3" fill="#e8dfa0"/><ellipse cx="34" cy="22" rx="6" ry="3" fill="#e8dfa0"/>',corn:'<circle cx="16" cy="24" r="5" fill="#f2c230"/><circle cx="28" cy="28" r="5" fill="#f2c230"/><circle cx="22" cy="17" r="5" fill="#f2c230"/>',spinner:'<path d="M24 8v8" stroke="#aaa" stroke-width="2"/><ellipse cx="24" cy="28" rx="7" ry="12" fill="#cfd8dc"/><path d="M24 40l-4 6h8z" fill="#888"/>',wobbler:'<path d="M6 26q18-14 32 0-14 12-32 0z" fill="#d9a441"/><path d="M38 26l6-6v12z" fill="#b8801f"/><circle cx="14" cy="25" r="2" fill="#111"/>',silicone:'<path d="M8 28q10-10 22-2l12-8-3 12 3 12-12-8q-12 6-22-6z" fill="#7fbf8f"/>'};return `<svg class="ic" viewBox="0 0 48 48">${m[id]}</svg>`}
+function ico(it){const n=+it.id.slice(1),c=["#8a6a3a","#4a7a8c","#6a5a9a","#c0392b"][n-1],t=it.t;let b="";
+ if(t==="r")b=`<path d="M6 42L${44-n*3} ${6+n}" stroke="${c}" stroke-width="${1.5+n*.7}" stroke-linecap="round"/><rect x="4" y="37" width="${8+n}" height="6" rx="2" fill="#555"/>`;
+ else if(t==="c")b=`<circle cx="24" cy="26" r="${8+n*2}" fill="none" stroke="${c}" stroke-width="3"/><path d="M24 26v-${6+n}M24 26h${6+n}" stroke="#ccc" stroke-width="2"/><rect x="20" y="6" width="8" height="8" fill="#666"/>`;
+ else if(t==="l")b=`<rect x="12" y="10" width="24" height="28" rx="4" fill="${c}"/><path d="M12 18h24M12 24h24M12 30h24" stroke="#fff5" stroke-width="${n}"/>`;
+ else b=`<path d="M28 6v22a${5+n*2} ${5+n*2} 0 1 1-${10+n*4} 0" stroke="#ccd" stroke-width="${1.5+n*.5}" fill="none" stroke-linecap="round"/><path d="M${28-10-n*4} 28l-3-5" stroke="#ccd" stroke-width="2"/>`;
+ return `<svg class="ic" viewBox="0 0 48 48">${b}</svg>`}
+const NI={fish:'<path d="M3 12c4-6 11-6 15 0-4 6-11 6-15 0zM18 12l4-4v8z"/>',loc:'<path d="M12 21s-7-6-7-11a7 7 0 0114 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',gear:'<path d="M4 20L20 4M15 4h5v5"/>',shop:'<path d="M5 8h14l-1 12H6zM9 8a3 3 0 016 0"/>',net:'<path d="M4 6h16v5a8 8 0 01-16 0zM9 6v13M15 6v13"/>',quest:'<path d="M6 4h12v16H6zM9 9h6M9 13h6"/>',prof:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 4-7 8-7s8 2 8 7"/>'};
+const M=n=>`${n}<i class="coin"></i>`;
+/* ===== Состояние (совместимо с сохранением v1) ===== */
+const KEY="fw_save_v1";
+const def=()=>({v:1,ver:2,lq:[],m:CFG.start.m,xp:0,lv:1,own:{r1:1,c1:1,l1:1,h1:1},bt:{worm:CFG.start.worm},eq:{r:"r1",c:"c1",l:"l1",h:"h1",b:"worm"},net:[],store:[],pend:null,rec:[],dex:{},ul:{lake:1},loc:"lake",st:{c:0,kg:0,top:0,pred:0,sold:0,vis:{lake:1}},q:{},sel:[],uid:1});
+function norm(x){const d=def();const s=Object.assign(d,x);if(!x.ver){while(s.xp>=CFG.xpNeed(s.lv)){s.xp-=CFG.xpNeed(s.lv);s.lv++}s.ver=2}for(const k of["store","rec","net","sel"])if(!Array.isArray(s[k]))s[k]=[];if(!Array.isArray(s.lq))s.lq=[];for(const b in s.bt)if(!(s.bt[b]>0))delete s.bt[b];fixBait(s);if(!s.dex||typeof s.dex!=="object")s.dex={};s.net.forEach(c=>{if(c&&!s.dex[c.f])s.dex[c.f]=1});return s}
+function fixBait(s){s=s||S;if(s.bt[s.eq.b]>0)return false;const n=Object.keys(BT).find(b=>s.bt[b]>0);if(n){s.eq.b=n;return true}return false}
+let S=def();try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&x.v===1)S=norm(x)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let tab="fish",cat="r",G={ph:"idle",msg:"Выбери точку на карте и наживку, затем забрасывай.",t1:0,t2:0,F:null,fish:null,held:false,pt:null,full:0,mapOpen:1},weather="ясно";
+setInterval(()=>{weather=["ясно","облачно","дождь"][Math.floor(Math.random()*3)];if(G.ph==="idle"&&tab==="fish")render()},120000);
+const env=()=>{const h=new Date().getHours();return{night:h<6||h>=21,rain:weather==="дождь",w:weather}};
+const $=q=>document.querySelector(q),fx=n=>+n.toFixed(2),R=Math.random;
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.className="on";clearTimeout(tt);tt=setTimeout(()=>t.className="",2400)}
+const eqi=t=>I[S.eq[t]];
+const price=c=>{const F=FISH[c.f];return Math.round(c.w*F.p*(1+.5*(c.w-F.w[0])/(F.w[1]-F.w[0]))*RAR[F.r])};
+const catOf=(f,w)=>{const F=FISH[f],x=(w-F.w[0])/(F.w[1]-F.w[0]);return x<.15?0:x<.45?1:2};
+/* ===== Карта глубин ===== */
+function dep(id,x,y){const m=LOC[id].dm;let d=m.b+m.s*Math.pow(1-y,.9);for(const p of m.p)d+=p[3]*Math.exp(-((x-p[0])**2+(y-p[1])**2)/(p[2]*p[2]));if(m.ch)d+=m.ch[2]*Math.exp(-(((x-m.ch[0])/m.ch[1])**2));return Math.max(.3,+d.toFixed(1))}
+const land=(id,x,y)=>y>.93+.012*Math.sin(x*13+id.length*2)||x<.03||x>.97||(LOC[id].dm.e&&(((x-.5)/.5)**2+((y-.48)/.5)**2)>1+.06*Math.sin(Math.atan2(y-.48,x-.5)*5));
+const dist=p=>Math.hypot(p.x-.5,(p.y-.97)*.72);
+const inRange=p=>dist(p)<=eqi("r").s.rng*.72+.0001&&!land(S.loc,p.x,p.y);
+const zone=d=>d<2.5?"мелководье":d<5?"средняя глубина":"глубокая яма";
+const PAL=[[0,[190,228,214]],[1.5,[110,192,200]],[3,[52,146,176]],[5,[28,96,148]],[8,[12,48,98]]],hx=c=>[1,3,5].map(i=>parseInt(c.substr(i,2),16));
+function pcol(d){for(let i=1;i<PAL.length;i++)if(d<=PAL[i][0]){const a=PAL[i-1],b=PAL[i],t=(d-a[0])/(b[0]-a[0]);return a[1].map((v,k)=>v+(b[1][k]-v)*t)}return PAL[4][1]}
+function drawMap(){const cv=$("#map");if(!cv||!cv.getContext)return;const w=cv.clientWidth||340,h=Math.round(w*.72);cv.width=w;cv.height=h;const g=cv.getContext("2d"),L=LOC[S.loc],k=S.loc+"|"+w;
+ if(!G.mc||G.mc.k!==k){const im=g.createImageData&&g.createImageData(w,h);if(!im||!im.data)return;const D=new Float32Array(w*h),lc=hx(L.sk[4]);
+  for(let j=0;j<h;j++)for(let i=0;i<w;i++)D[j*w+i]=land(S.loc,(i+.5)/w,(j+.5)/h)?-1:dep(S.loc,(i+.5)/w,(j+.5)/h);
+  for(let j=0;j<h;j++)for(let i=0;i<w;i++){const n=j*w+i,d=D[n];let c;
+   if(d<0){const z=((i*7+j*13)%17)/17*18-9;c=lc.map(v=>Math.max(0,Math.min(255,v+z)))}
+   else{c=pcol(d).slice();const r=i+1<w?D[n+1]:d,b=j+1<h?D[n+w]:d;if(r>=0&&Math.floor(r)!==Math.floor(d)||b>=0&&Math.floor(b)!==Math.floor(d)){const f=Math.floor(Math.max(r,b,d))%3===0?.72:.88;c=c.map(v=>v*f)}
+    if((i>3&&D[n-3]<0)||(i<w-3&&D[n+3]<0)||(j>3&&D[n-3*w]<0)||(j<h-3&&D[n+3*w]<0))c=c.map(v=>v+(255-v)*.55)}
+   im.data[n*4]=c[0];im.data[n*4+1]=c[1];im.data[n*4+2]=c[2];im.data[n*4+3]=255}
+  G.mc={k,im}}
+ g.putImageData(G.mc.im,0,0);g.textAlign="center";g.font="11px sans-serif";g.fillStyle="#fff";g.shadowColor="#000";g.shadowBlur=3;
+ L.dm.p.filter(p=>p[3]>=2.5).forEach(p=>{if(!land(S.loc,p[0],p[1]))g.fillText(dep(S.loc,p[0],p[1])+" м",p[0]*w,p[1]*h+4)});
+ L.dm.lm.forEach(l=>{g.beginPath();g.arc(l[0]*w,l[1]*h,3,0,7);g.fill();g.fillText(l[2],l[0]*w,l[1]*h-7)});g.fillText("Ваш берег",w/2,h-6);g.shadowBlur=0;
+ g.strokeStyle="#d9a441cc";g.setLineDash([6,5]);g.lineWidth=1.5;g.beginPath();g.arc(w/2,h*.97,eqi("r").s.rng*.72*w,Math.PI,2*Math.PI);g.stroke();g.setLineDash([]);
+ if(G.pt){const x=G.pt.x*w,y=G.pt.y*h;g.strokeStyle=inRange(G.pt)?"#fff":"#e8704a";g.lineWidth=2.5;g.beginPath();g.arc(x,y,10,0,7);g.moveTo(x-16,y);g.lineTo(x+16,y);g.moveTo(x,y-16);g.lineTo(x,y+16);g.stroke()}}
+function pinfo(){const e=$("#pinfo");if(!e)return;if(!G.pt){e.innerHTML='<span class="mu">Нажми на карту, чтобы выбрать точку заброса.</span>';return}
+ const d=dep(S.loc,G.pt.x,G.pt.y),ok=inRange(G.pt),w=weights(G.pt),top=Object.keys(w).sort((a,b)=>w[b]-w[a]).slice(0,2).map(f=>FISH[f].n).join(", ");
+ e.innerHTML=`Глубина ≈ <b>${d} м</b> · ${zone(d)}<br>${ok?`<span class="mu">Здесь вероятнее: ${top}</span>`:'<span class="dn">Далеко для этого удилища (или берег).</span>'}`}
+/* ===== Рыбалка ===== */
+function compat(){return eqi("l").s.str>eqi("c").s.cap?"Катушка не рассчитана на эту леску — смени катушку или леску.":""}
+function weights(pt){const L=LOC[S.loc],B=BT[S.eq.b],e=env(),h=eqi("h"),d=pt?dep(S.loc,pt.x,pt.y):2,o={};for(const f in L.pool){const F=FISH[f],X=FX[f],pd=X[0]*(e.night?.75:1);const m=.08+.92*Math.exp(-Math.pow((d-pd)/X[1],2));o[f]=L.pool[f]*(B.a[f]||.12)*m*(e.night?F.nt:1)*(e.rain?F.rn:1)*(F.w[1]>h.s.max*3?.5:1)}return o}
+function setMsg(m){G.msg=m;const e=$("#msg");if(e)e.innerHTML=m}
+function reset(){clearTimeout(G.t1);clearTimeout(G.t2);G.ph="idle";G.held=false}
+function cast(){
+ if(S.pend)return;const c=compat();if(c)return toast(c);
+ if(!G.pt)return toast("Выбери точку на карте.");if(!inRange(G.pt))return toast("Точка вне досягаемости удилища.");
+ const B=BT[S.eq.b];if(!B||!S.bt[S.eq.b])return toast("Нет наживки — купи в магазине.");
+ if(B.nat){const id=S.eq.b;S.bt[id]--;if(S.bt[id]<=0){delete S.bt[id];toast(fixBait()?"Наживка закончилась — выбрана: "+BT[S.eq.b].n:"Наживка закончилась. Купи новую в лавке.")}}if(!S.st.vis[S.loc]){S.st.vis[S.loc]=1;addXp(CFG.visXp)}save();
+ const w=weights(G.pt),tot=Object.values(w).reduce((a,b)=>a+b,0);let r=R()*tot,pick;for(const f in w){r-=w[f];if(r<=0){pick=f;break}}pick=pick||Object.keys(w)[0];
+ G.fish=pick;G.ph="wait";setMsg("Заброс выполнен. Следи за поплавком… не подсекай рано!");
+ G.t1=setTimeout(bite,(3+R()*6)*1000/Math.max(.5,Math.min(2,.5+tot/8)));render()}
+function bite(){const X=FX[G.fish],a=CFG.gz.w+X[3]/500;G.ph="bite";G.bt0=performance.now();G.D=(1.2+eqi("r").s.sens)*1000;G.sw=[a,a+.3];setMsg(`<b>Клюёт!</b> ${X[6][0].toUpperCase()+X[6].slice(1)}. Подсекай в зелёной зоне!`);render();gl();G.t2=setTimeout(()=>{if(G.ph!=="bite")return;G.ph="idle";setMsg("Упустил поклёвку — рыба ушла. Подсекай, когда маркер в зелёной зоне.");render()},G.D)}
+function gl(){if(G.ph!=="bite")return;const m=$("#mk");if(m)m.style.left=Math.min(100,(performance.now()-G.bt0)/G.D*100)+"%";requestAnimationFrame(gl)}
+function early(){reset();setMsg("Смотал снасть: рыба не успела клюнуть.");render()}
+function strike(){clearTimeout(G.t2);const t=(performance.now()-G.bt0)/G.D,[a,b]=G.sw;
+ if(t<a){reset();setMsg("Подсёк слишком рано — рыба выплюнула наживку.");return render()}
+ if(t<=b||R()<.4)return hook();reset();setMsg("Опоздал с подсечкой — рыба сошла.");render()}
+function hook(){const F=FISH[G.fish],X=FX[G.fish],d=dep(S.loc,G.pt.x,G.pt.y),dm=Math.exp(-Math.pow((d-X[0])/X[1],2)),r=Math.pow(R(),2.6-.9*dm),w=fx(F.w[0]+(F.w[1]-F.w[0])*r),rod=eqi("r"),ln=eqi("l"),lim=Math.min(rod.s.pow,ln.s.str);
+ G.F={f:G.fish,w,d,lim,lf:w/lim,prog:15,ten:20,sta:100,phase:"calm",risk:0,next:1+R()*1.5,last:performance.now()};G.ph="fight";G.held=false;
+ const rs=G.F.lf*X[2];setMsg(`Подсечка удалась! Что-то на крючке… Сопротивление: <b>${rs<.45?"слабое":rs<.9?"заметное":"тяжёлое"}</b>. Держи кнопку, отпускай при рывке.`);render();requestAnimationFrame(loop)}
+const fpos=()=>G.pt?{x:180+(G.pt.x-.5)*220,y:105+G.pt.y*80}:{x:180,y:150};
+function fmv(F){const m=$("#fm"),l=$("#ln");if(!m||!l||!m.setAttribute)return;const f=fpos(),r=Math.max(0,Math.min(100,F.prog))/100,x=f.x+(250-f.x)*r+(F.phase==="surge"?F.dir*9*Math.sin(performance.now()/55):0),y=f.y+(205-f.y)*r;m.setAttribute("transform",`translate(${x} ${y})`);l.setAttribute("d",`M236 40L${x} ${y}`)}
+function loop(now){if(G.ph!=="fight")return;const F=G.F,Fi=FISH[F.f],X=FX[F.f],J=FJ[F.f],L=LOC[S.loc],dt=Math.min(.05,(now-F.last)/1000);F.last=now;
+ F.next-=dt;
+ if(F.phase==="calm"&&F.next<=0){F.phase="warn";F.pt=.45}
+ else if(F.phase==="warn"){F.pt-=dt;if(F.pt<=0){F.phase="surge";F.sl=J[1]*(.5+F.sta/200)*(.8+R()*.4);F.dir=R()<.5?-1:1;if(F.w>eqi("h").s.max&&R()<.25)return end(0,"Крючок разогнуло при рывке — рыба тяжелее допустимого для крючка ("+eqi("h").s.max+" кг).")}}
+ else if(F.phase==="surge"){F.sl-=dt;if(F.sl<=0){F.phase="calm";F.next=J[2]*(.8+R()*.5)*(.6+F.sta/250)}}
+ const sg=F.phase==="surge",cur=1+L.cur*.4,base=(9+16*F.lf)*X[2]*cur;
+ if(G.held){F.prog+=eqi("c").s.speed*dt*(sg?.15:1)/(1+Fi.d*.1)*(1.3-.5*F.sta/100);F.ten+=base*(sg?J[0]:.55)*dt;F.sta=Math.max(0,F.sta-dt*(sg?3:10)*40/X[3])}
+ else{F.ten=Math.max(0,F.ten-25*dt);F.prog-=(sg?4*J[0]*(1+F.lf*.4):1.2)*dt}
+ F.ten=Math.min(100,F.ten);F.risk=Math.max(0,(F.risk||0)+(F.ten>80?dt*.4:-dt*.5));
+ const t=$("#ten"),p=$("#prg"),ti=$("#tir");if(t){t.style.width=F.ten+"%";t.style.background=F.ten>70?"#e8704a":F.ten>45?"#d9a441":"#6fcf97"}if(p)p.style.width=Math.max(0,F.prog)+"%";if(ti)ti.style.width=(100-F.sta)+"%";
+ const q=(i,v)=>{const e=$(i);if(e)e.textContent=v};q("#tl",Math.round(F.ten)+"%");q("#pl",Math.round(Math.max(0,F.prog))+"%");q("#tr",Math.round(100-F.sta)+"%");
+ const st=F.ten>70?"ОПАСНО: леска на пределе — отпусти!":F.risk>.4?"Рыба сходит — сбрось натяжение!":sg?"РЫВОК! Рыба уходит — отпусти!":F.phase==="warn"?"Рыба напряглась — приготовься отпустить":G.held?"Подтягиваешь":"Слабина — рыба отдыхает и забирает дистанцию";
+ q("#st",st);q("#sg",sg||F.ten>70?"ОТПУСТИ":F.phase==="warn"?"Приготовься":"Тяни");fmv(F);
+ if(F.ten>=100)return end(0,`Леска лопнула: ${sg?"рывок рыбы":"постоянное высокое натяжение"} превысил предел снасти ${fx(F.lim)} кг${L.cur?" (течение добавило нагрузки)":""}. Отпускай при рывке или возьми прочнее удилище/леску.`);
+ if(F.risk>=1)return end(0,"Рыба сошла с крючка: ты слишком долго держал натяжение выше 80%. Сбрасывай нагрузку при рывке.");
+ if(F.prog<=0)return end(0,"Рыба ушла: ты слишком долго не тянул, и она забрала всю дистанцию.");
+ if(F.prog>=100)return end(1);requestAnimationFrame(loop)}
+function xpFor(f,w){const F=FISH[f],fr=Math.max(0,Math.min(1,(w-F.w[0])/(F.w[1]-F.w[0])));let x=F.d*4.5*RAR[F.r]*(.5+1.5*fr);const n=S.rec.filter(i=>i===f).length;x*=Math.max(.5,Math.pow(CFG.repeatDecay,n));if(!S.dex[f]){x+=CFG.newSp;S.dex[f]=1}S.rec.push(f);if(S.rec.length>CFG.repeatWin)S.rec.shift();return Math.max(1,Math.min(Math.round(x),Math.round(CFG.xpNeed(S.lv)*.5)))}
+function end(win,why){const F=G.F;reset();
+ if(win){const Fi=FISH[F.f],ct=catOf(F.f,F.w),c={id:S.uid++,f:F.f,w:F.w,loc:S.loc,dep:F.d,cat:ct,len:Math.round(FX[F.f][5]*Math.cbrt(F.w)),t:Date.now()},xp=xpFor(F.f,F.w);S.pend=c;S.st.c++;S.st.kg=fx(S.st.kg+F.w);S.st.top=Math.max(S.st.top,F.w);if(Fi.pr)S.st.pred++;G.full=0;
+  setMsg(`Рыба на берегу! +${xp} опыта.`);addXp(xp)}
+ else setMsg("Неудача: "+why);save();render()}
+function addXp(x){S.xp+=x;while(S.xp>=CFG.xpNeed(S.lv)){S.xp-=CFG.xpNeed(S.lv);S.lv++;S.m+=CFG.lvRw(S.lv);if(!S.lq.includes(S.lv))S.lq.push(S.lv)}}
+/* ===== Улов: Забрать / В садок (идемпотентно, рыба хранится в S.pend до выбора) ===== */
+const have=id=>S.net.some(c=>c.id===id)||S.store.some(c=>c.id===id);
+function note(m,k){G.note={m,k:k||"ok"};clearTimeout(G.nt);G.nt=setTimeout(()=>{G.note=null;const e=$(".note");if(e&&e.remove)e.remove()},2400)}
+function take(){const c=S.pend;if(!c)return;if(S.store.length>=CFG.storeCap)return toast("Хранилище полно ("+CFG.storeCap+").");S.pend=null;G.full=0;if(!have(c.id))S.store.push(c);save();note("Рыба в хранилище");render()}
+function toNet(){const c=S.pend;if(!c)return;if(S.net.length>=CFG.netCap){G.full=1;save();toast("Садок полон — рыба не добавлена");return render()}S.pend=null;G.full=0;if(!have(c.id)){S.net.push(c);note(`В садок: ${FISH[c.f].n}, ${c.w} кг`)}save();render()}
+function rel(){if(!S.pend)return;S.pend=null;G.full=0;save();toast("Рыба отпущена");render()}
+function toNet2(id){const i=S.store.findIndex(c=>c.id===id);if(i<0)return;if(S.net.length>=CFG.netCap)return toast("Садок полон.");const c=S.store.splice(i,1)[0];if(!have(c.id))S.net.push(c);save();render()}
+function appraise(){[...S.net,...S.store].forEach(c=>c.ap=1);save();toast("Улов оценён");render()}
+/* ===== Экономика ===== */
+function buy(id){const it=I[id];if(!it||S.own[id])return toast("Уже куплено.");if(S.lv<it.lv)return toast("Нужен уровень "+it.lv);if(S.m<it.p)return toast("Не хватает денег.");S.m-=it.p;S.own[id]=1;save();toast("Куплено: "+it.n);render()}
+function buyB(id){const b=BT[id];if(!b)return;if(S.lv<b.lv)return toast("Нужен уровень "+b.lv);if(!b.nat&&S.bt[id])return toast("У тебя уже есть эта приманка.");if(S.m<b.p)return toast("Не хватает денег.");S.m-=b.p;S.bt[id]=(S.bt[id]||0)+(b.nat?b.pack:1);save();toast("Куплено: "+b.n);render()}
+function equip(t,id){if(t==="b"?!(S.bt[id]>0):!S.own[id])return toast("Этого нет в запасе.");S.eq[t]=id;save();render()}
+function sell(ids){let tot=0,n=0;for(const id of ids){let a=S.net,i=a.findIndex(c=>c.id===id);if(i<0){a=S.store;i=a.findIndex(c=>c.id===id)}if(i<0)continue;tot+=price(a[i]);a.splice(i,1);n++}
+ if(!n)return toast("Нечего продавать.");S.m+=tot;S.st.sold+=tot;S.sel=S.sel.filter(i=>have(i));save();toast(`Продано: ${n} шт. за ${tot}`);render()}
+function openLoc(id){const L=LOC[id];if(S.ul[id])return setLoc(id);if(S.lv<L.lv)return toast("Нужен уровень "+L.lv);if(S.m<L.cost)return toast("Не хватает денег.");S.m-=L.cost;S.ul[id]=1;save();toast("Открыто: "+L.n);setLoc(id)}
+function setLoc(id){if(!S.ul[id])return;S.loc=id;G.pt=null;G.mapOpen=1;save();toast("Место: "+LOC[id].n);render()}
+function claim(id){const q=QS.find(x=>x.id===id);if(!q||S.q[id]||q.g(S)<q.need)return;S.q[id]=1;S.m+=q.rw;save();toast("Награда: "+q.rw);render()}
+/* ===== UI ===== */
+const TABS=[["fish","Ловля"],["loc","Места"],["gear","Снасти"],["shop","Лавка"],["net","Садок"],["quest","Задачи"],["prof","Я"]];
+function go(t){if(G.ph==="fight")return toast("Идёт вываживание!");reset();tab=t;render()}
+function statsLine(it){const e=eqi(it.t);return Object.keys(it.s).map(k=>{const d=fx(it.s[k]-e.s[k]);return `<span class="chip">${ST[k]} ${it.s[k]}${it.id!==e.id&&d?` <span class="${d>0?"up":"dn"}">(${d>0?"+":""}${d})</span>`:""}</span>`}).join("")}
+function itemCard(it,mode){const own=S.own[it.id],eq=S.eq[it.t]===it.id;
+ return `<div class="card"><div class="it">${ico(it)}<div style="flex:1"><div class="row"><b>${it.n}</b><span class="mu">${it.p?M(it.p):"стартовый"}</span></div><div>${statsLine(it)}</div></div></div><div class="row" style="margin-top:6px"><span class="mu">Ур. ${it.lv}</span>${mode==="shop"?(own?'<span class="up">Куплено</span>':`<button class="btn" onclick="buy('${it.id}')" ${S.lv<it.lv||S.m<it.p?"disabled":""}>Купить</button>`):(eq?'<span class="up">Экипировано</span>':`<button class="btn s" onclick="equip('${it.t}','${it.id}')">Экипировать</button>`)}</div></div>`}
+const pv=c=>c.ap?M(price(c)):"—";
+const fr=c=>`<b>${FISH[c.f].n}</b> ${c.w} кг <span class="mu">${CN[c.cat!=null?c.cat:catOf(c.f,c.w)]}</span>`;
+function openMap(){if(G.ph!=="idle")return toast("Сначала закончи рыбалку.");G.mapOpen=1;render()}
+function stage(L,e){const f=fpos(),ph=G.ph,n=e.night,fl=ph==="fight"||ph==="idle"?' opacity="0"':"";
+ return `<svg viewBox="0 0 360 250" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${L.sk[0]}"/><stop offset="1" stop-color="${L.sk[1]}"/></linearGradient><linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${L.sk[2]}"/><stop offset="1" stop-color="${L.sk[3]}"/></linearGradient></defs>
+<rect width="360" height="110" fill="url(#sk)"/><circle cx="70" cy="40" r="${n?10:15}" fill="${n?"#eef2ff":"#fff3c4"}" opacity=".9"/>
+<path d="M0 108V78l20-18 22 20 26-26 28 24 30-20 26 22 30-28 32 26 24-18 22 20V108z" fill="${L.sk[4]}" opacity=".6"/><path d="M0 108V90l30-14 28 16 34-20 30 18 40-16 36 16 40-12 34 14 28-8V108z" fill="${L.sk[4]}"/>
+<rect y="108" width="360" height="142" fill="url(#wt)"/>${[0,1,2,3,4,5].map(i=>`<path d="M${20+i*50} ${120+i*20}h${60-i*5}" stroke="#fff" stroke-opacity=".12" stroke-width="2"/>`).join("")}
+<path d="M0 250V210q10-30 6-60M14 250q-6-30 4-70M26 250q4-20-2-50" stroke="#16341f" stroke-width="3" fill="none"/><path d="M352 250L236 40" stroke="#2c1f14" stroke-width="5" stroke-linecap="round"/>
+${ph==="idle"&&G.pt?`<circle cx="${f.x}" cy="${f.y}" r="8" fill="none" stroke="#fff" stroke-dasharray="3 3"/>`:""}
+<path id="ln" d="M236 40L${f.x} ${f.y}" stroke="#fffc" stroke-width="1" ${ph==="idle"?'opacity="0"':""}/>
+<g transform="translate(${f.x} ${f.y})"${fl}><ellipse rx="14" ry="4" fill="none" stroke="#fff" stroke-opacity=".5"/><g class="fb ${ph==="bite"?"dip":ph==="wait"?"on":""}"><circle cy="-6" r="5" fill="#e33"/><circle cy="-1" r="3" fill="#fff"/></g></g>
+<g id="fm" transform="translate(${f.x} ${f.y})"${ph==="fight"?"":' opacity="0"'}><ellipse rx="11" ry="4" fill="#0a1a1f"/><path d="M10 0l7-4v8z" fill="#0a1a1f"/></g>${n?'<rect width="360" height="250" fill="#001230" opacity=".42"/>':""}</svg>${e.rain?'<div class="rain"></div>':""}`}
+const V={
+fish(){const L=LOC[S.loc],e=env(),B=BT[S.eq.b],c=compat(),fg=G.ph==="fight",d=G.pt?dep(S.loc,G.pt.x,G.pt.y):null;
+ const bl=Object.keys(BT).filter(b=>S.bt[b]).map(b=>`<option value="${b}" ${S.eq.b===b?"selected":""}>${BT[b].n} (${BT[b].nat?S.bt[b]+" шт":"многоразовая"})</option>`).join("");
+ const lab={idle:"Заброс",wait:"Смотать",bite:"Подсечка!",fight:'<span id="sg">Тяни</span>'}[G.ph];
+ const sl=(h,t,v)=>`<div class="slot">${h}<span>${t}</span><b>${v}</b></div>`,r=eqi("r"),cc=eqi("c"),ln=eqi("l"),hk=eqi("h");
+ return `<div class="stage">${stage(L,e)}<div class="tag l">${L.n}<small>${e.night?"НОЧЬ":"ДЕНЬ"} · ${e.w.toUpperCase()}${L.cur?" · ТЕЧЕНИЕ":""}</small></div>${G.note?`<div class="note ${G.note.k}">${G.note.m}</div>`:""}<button class="tag r" onclick="openMap()">КАРТА<small>${d?d+" м · "+zone(d):"выбери точку"}</small></button></div>
+ <div class="fg ${fg?"":"idl"}"><div class="fr"><span>НАТЯЖЕНИЕ</span><div class="bar zbar"><i id="ten"></i></div><em id="tl">0%</em></div><div class="fr"><span>ВЫВАЖИВАНИЕ</span><div class="bar"><i id="prg"></i></div><em id="pl">0%</em></div><div class="fr"><span>УСТАЛОСТЬ</span><div class="bar"><i id="tir" style="background:#6fb3d9"></i></div><em id="tr">0%</em></div>
+ <div id="st"></div>${G.ph==="bite"?`<div class="gz"><span class="zn" style="left:${G.sw[0]*100}%;width:${(G.sw[1]-G.sw[0])*100}%"></span><i class="mk" id="mk"></i></div>`:""}<div id="msg" class="mu">${G.msg}</div></div>
+ <div class="rig">${sl(ico(r),"Удилище",r.s.pow+" кг")}${sl(ico(cc),"Катушка","до "+cc.s.cap)}${sl(ico(ln),"Леска",ln.s.str+" кг")}${sl(ico(hk),"Крючок","до "+hk.s.max)}${sl(bico(S.eq.b),"Приманка",B.nat?S.bt[S.eq.b]+" шт":"∞")}</div>
+ ${G.ph==="idle"?`<select id="bsel" style="margin-bottom:8px" onchange="equip('b',this.value)">${bl||'<option>нет приманок</option>'}</select>`:""}${c?`<div class="card dn">${c}</div>`:""}
+ <button class="btn w" id="big">${lab}</button>
+ ${G.mapOpen&&G.ph==="idle"?`<div class="sheet"><div class="chart"><canvas id="map"></canvas><div class="legend"><span>0 м</span><i></i><span>8+ м</span></div><div id="pinfo"></div><button class="btn w" style="margin-top:8px" onclick="G.mapOpen=0;render()">${G.pt?"Готово — к воде":"Закрыть"}</button></div></div>`:""}`},
+loc(){return Object.keys(LOC).map(id=>{const L=LOC[id],u=S.ul[id];return `<div class="card" style="border-left:6px solid ${L.sk[2]}"><div class="row"><b>${L.n}</b>${S.loc===id?'<span class="up">Здесь</span>':""}</div><div class="mu">${L.d}</div><div style="margin:6px 0">${Object.keys(L.pool).map(f=>`<span class="chip">${FISH[f].n}</span>`).join("")}</div><div class="mu">Советуем: ${L.rec}</div><div class="row" style="margin-top:8px"><span class="mu">Ур. ${L.lv}${L.cost?" · "+L.cost:""}</span><button class="btn" onclick="openLoc('${id}')" ${S.loc===id?"disabled":""}>${u?"Выбрать":"Открыть"}</button></div></div>`}).join("")},
+gear(){return Object.keys(TN).map(t=>`<h3>${TN[t]}</h3>`+Object.values(I).filter(i=>i.t===t&&S.own[i.id]).map(i=>itemCard(i,"gear")).join("")).join("")+`<h3>Приманки</h3>`+Object.keys(BT).filter(b=>S.bt[b]).map(b=>`<div class="card"><div class="it">${bico(b)}<div style="flex:1"><div class="row"><b>${BT[b].n}</b><span class="mu">${BT[b].nat?S.bt[b]+" шт":"многоразовая"}</span></div><div class="mu">Любят: ${Object.keys(BT[b].a).filter(f=>BT[b].a[f]>=1.5).map(f=>FISH[f].n).join(", ")}</div></div></div><div class="row" style="margin-top:6px"><span></span>${S.eq.b===b?'<span class="up">Выбрана</span>':`<button class="btn s" onclick="equip('b','${b}')">Выбрать</button>`}</div></div>`).join("")},
+shop(){const cs=[...Object.keys(TN),"n","a"],cn={...TN,n:"Наживки",a:"Приманки"};
+ let h=cs.map(c=>`<span class="chip ${cat===c?"on":""}" onclick="cat='${c}';render()" style="padding:8px 12px">${cn[c]}</span>`).join("");
+ if(TN[cat])h+=Object.values(I).filter(i=>i.t===cat).map(i=>itemCard(i,"shop")).join("");
+ else h+=Object.keys(BT).filter(b=>!!BT[b].nat===(cat==="n")).map(b=>{const x=BT[b];return `<div class="card"><div class="it">${bico(b)}<div style="flex:1"><div class="row"><b>${x.n}</b><span class="mu">${M(x.p)}${x.nat?" / "+x.pack+" шт":""}</span></div><div class="mu">Любят: ${Object.keys(x.a).filter(f=>x.a[f]>=1.5).map(f=>FISH[f].n).join(", ")}</div></div></div><div class="row" style="margin-top:6px"><span class="mu">Ур. ${x.lv} · есть: ${x.nat?(S.bt[b]||0):(S.bt[b]?"да":"нет")}</span><button class="btn" onclick="buyB('${b}')" ${S.lv<x.lv||S.m<x.p?"disabled":""}>Купить</button></div></div>`}).join("");
+ return h},
+net(){const n=S.net,s=S.store;let h=`<div class="card row"><span>Садок ${n.length}/${CFG.netCap}</span><button class="btn s" onclick="appraise()" ${n.length+s.length?"":"disabled"}>Оценить улов</button></div>`;
+ if(n.length){const st=S.sel.reduce((a,i)=>{const c=n.concat(s).find(x=>x.id===i);return a+(c&&c.ap?price(c):0)},0);h+=`<div class="row" style="margin-bottom:10px"><button class="btn s" style="flex:1" onclick="sell(S.sel)" ${S.sel.length?"":"disabled"}>Продать выбранные${st?" ("+st+")":""}</button><button class="btn" style="flex:1" onclick="sell(S.net.map(c=>c.id))">Продать садок</button></div>`+n.map(c=>`<div class="card row" onclick="tsel(${c.id})"><span><i class="ck ${S.sel.includes(c.id)?"on":""}"></i> ${fr(c)}</span><span>${pv(c)}</span></div>`).join("")}else h+=`<div class="card">Садок пуст.</div>`;
+ h+=`<h3>Личное хранилище ${s.length}/${CFG.storeCap}</h3>`+(s.length?s.map(c=>`<div class="card"><div class="row"><span>${fr(c)}</span><span>${pv(c)}</span></div><div class="row" style="margin-top:6px"><button class="btn s" onclick="toNet2(${c.id})">В садок</button><button class="btn s" onclick="sell([${c.id}])">Продать</button></div></div>`).join(""):`<div class="card mu">Пусто. Сюда попадает рыба по кнопке «Забрать».</div>`);return h},
+quest(){return QS.map(q=>{const g=Math.min(q.need,q.g(S)),d=S.q[q.id];return `<div class="card"><div class="row"><b>${q.n}</b><span class="mu">${M(q.rw)}</span></div><div class="mu">${q.d} (${g}/${q.need})</div><div class="bar" style="margin:6px 0"><i style="width:${g/q.need*100}%"></i></div>${d?'<span class="up">Получено</span>':`<button class="btn" onclick="claim('${q.id}')" ${g<q.need?"disabled":""}>Забрать награду</button>`}</div>`}).join("")},
+prof(){const s=S.st,lt=[];for(let l=1;l<=20;l++){const u=Object.values(I).filter(i=>i.lv===l+1).map(i=>i.n).concat(Object.values(LOC).filter(x=>x.lv===l+1).map(x=>x.n));lt.push(`<div class="row mu"><span>${l}→${l+1}: ${CFG.xpNeed(l)} оп.</span><span>+${CFG.lvRw(l+1)}${u.length?" · "+u.join(", "):""}</span></div>`)}
+ return `<div class="card"><h3>${NAME}</h3><div>Уровень ${S.lv} · опыт ${S.xp}/${CFG.xpNeed(S.lv)}</div><div class="bar" style="margin:6px 0"><i style="width:${S.xp/CFG.xpNeed(S.lv)*100}%"></i></div></div>
+ <div class="card"><div>Баланс: ${M(S.m)}</div><div>Поймано рыб: ${s.c}</div><div>Общий вес: ${s.kg} кг</div><div>Самая тяжёлая: ${s.top} кг</div><div>Продано на: ${M(s.sold)}</div><div>Видов поймано: ${Object.keys(S.dex).length}/${Object.keys(FISH).length}</div></div>
+ <div class="card"><h3>Таблица уровней</h3>${lt.join("")}</div>
+ <div class="card mu">Сохранение: только на этом устройстве (localStorage), без сервера и без переноса. Платежи: ${PAY.enabled?"включены":"не подключены"}.</div>
+ <button class="btn s w" onclick="if(confirm('Удалить весь прогресс?')){localStorage.removeItem(KEY);S=def();G.pt=null;render()}">Сбросить прогресс</button>`}};
+function tsel(id){const i=S.sel.indexOf(id);i<0?S.sel.push(id):S.sel.splice(i,1);render()}
+function unlocks(l){const u=[];Object.values(I).filter(i=>i.lv===l&&l>1).forEach(i=>u.push("Снасть: "+i.n));Object.values(BT).filter(b=>b.lv===l&&l>1).forEach(b=>u.push("Приманка: "+b.n));Object.values(LOC).filter(x=>x.lv===l&&l>1).forEach(x=>u.push("Водоём: "+x.n));QS.filter(q=>q.ul===l).forEach(q=>u.push("Задание: "+q.n+" можно завершить"));return u}
+function lvOk(){if(S.lq.length)S.lq.shift();save();render()}
+function lvModal(){const l=S.lq[0];if(!l)return"";const u=unlocks(l);return `<div class="mod"><div class="mc" style="border-color:var(--ac)"><div class="mb" style="color:var(--ac)">Новый уровень!</div><div class="lvn">${l}</div><p>Поздравляем! Ты стал опытнее: награда за уровень ${M(CFG.lvRw(l))}.</p><ul>${u.length?u.map(x=>`<li>${x}</li>`).join(""):`<li class="mu">Новых возможностей на этом уровне нет. До уровня ${l+1} нужно ${CFG.xpNeed(l)} опыта.</li>`}</ul><button class="btn w" onclick="lvOk()">Продолжить</button></div></div>`}
+function modal(){const c=S.pend;if(!c)return lvModal();const F=FISH[c.f],ct=c.cat!=null?c.cat:catOf(c.f,c.w),sc=[.8,1,1.2][ct],col=["#7fb6c9","#d9a441","#e8704a"][ct];
+ return `<div class="mod"><div class="mc" style="border-color:${col}"><div class="mb" style="color:${col}">${CN[ct]} особь · ${RL[F.r]}</div><div style="transform:scale(${sc});margin:8px 0">${fishSVG(c.f)}</div><h2>${F.n}</h2><div class="big">${c.w} кг · ${c.len} см</div><p class="mu" style="margin:6px 0">${FX[c.f][8]}</p><p class="mu" style="margin-bottom:10px">${LOC[c.loc].n}, глубина ${c.dep} м</p>${G.full?`<div class="dn" style="margin-bottom:8px">Садок полон (${S.net.length}/${CFG.netCap}). Забери рыбу в хранилище или отпусти.</div>`:""}<div class="row"><button class="btn s" style="flex:1" onclick="take()">Забрать</button><button class="btn" style="flex:1" onclick="toNet()">В садок ${S.net.length}/${CFG.netCap}</button></div>${G.full?'<button class="btn s w" style="margin-top:8px" onclick="rel()">Отпустить</button>':""}</div></div>`}
+function render(){fixBait();
+ $("#top").innerHTML=`<div class="row"><b class="logo">FISHING WORLD</b><b>${M(S.m)}</b></div><div class="row mu"><span>Ур. ${S.lv}</span><span>${S.xp}/${CFG.xpNeed(S.lv)}</span></div><div class="bar"><i style="width:${S.xp/CFG.xpNeed(S.lv)*100}%"></i></div>`;
+ $("#nav").innerHTML=TABS.map(t=>`<button class="${tab===t[0]?"on":""}" onclick="go('${t[0]}')"><svg viewBox="0 0 24 24">${NI[t[0]]}</svg>${t[1]}</button>`).join("");
+ const m=$("#main"),sc=m.scrollTop;m.innerHTML=V[tab]();m.scrollTop=sc;$("#modal").innerHTML=modal();
+ if(tab==="fish"){const b=$("#big");const dn=e=>{e.preventDefault();if(S.pend)return;if(G.ph==="idle")cast();else if(G.ph==="wait")early();else if(G.ph==="bite")strike();else if(G.ph==="fight")G.held=true},up=()=>{G.held=false};
+  b.onpointerdown=dn;b.onpointerup=up;b.onpointercancel=up;b.onpointerleave=up;b.oncontextmenu=e=>e.preventDefault();
+  const cv=$("#map");if(cv){drawMap();pinfo();cv.onpointerdown=e=>{if(G.ph!=="idle")return toast("Сначала закончи рыбалку.");const r=cv.getBoundingClientRect();const p={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height};if(land(S.loc,p.x,p.y))return toast("Это берег.");G.pt=p;drawMap();pinfo()}}}}
+render();
+window.addEventListener("resize",()=>{if(tab==="fish")drawMap()});
+</script></body></html>
